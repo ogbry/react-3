@@ -13,8 +13,6 @@ import Edit from './Edit/Edit';
 
 ///////////// THIS COMPONENT IS BEING RENDERED IN THE *APP* COMPONENT
 
-
-
 export default class Post extends Component {
   constructor() {
     super();
@@ -54,32 +52,52 @@ export default class Post extends Component {
   }
 
   render() {
+    // This is destructuring! You can also think of it as being written as so:
+    // const editing = this.state.editing
+    // const showMasterMenu = this.state.showMasterMenu
     const { editing, showMasterMenu } = this.state;
-    const { text, date, id, updatePostFn, deletePostFn } = this.props;
+    const { id, text, date, updatePostFn, deletePostFn } = this.props;
 
     return (
+      // Main body of post
       <section className="Post__parent" onClick={this.hideMasterMenu}>
         {/* Three dots in top right corner */}
         <div className="Post__master-controls">
           <MdMoreVert onClick={this.toggleMasterMenu} />
+
+          {/* Drop-down menu. Remember that the "showMasterMenu" variable has been destructured off of this.state */}
           <div
             className="Post__master-menu"
             style={{ display: showMasterMenu ? 'flex' : 'none' }}
           >
             <span onClick={this.showEdit}>Edit</span>
-            <span onClick ={ () => this.props.deletePostFn(this.props.id)}>Delete</span>
+            <span onClick={() => deletePostFn(id)}>Delete</span>
           </div>
         </div>
+
+        {/* This is where all the meta data of the post will go (who, when, where) */}
         <div className="Post__meta-data">
           <div className="Post__profile-picture">
             <MdPersonOutline />
           </div>
+
           <span className="Post__name">Boom.Camp</span>
           <span className="Post__handle">@boom.camp</span>
+
           <span className="Post__date">- {date}</span>
         </div>
+
+        {/* This is where the text goes. Notice the ternary statement.
+            The ternary statement decides to display either the text OR the editor view
+            You can also think of it as being written as so:
+              if( this.state.editing === true ) {
+                <Edit ... />
+              } else {
+                <span ... ></span>
+              }
+        */}
         <div className="Post__content">
-          {
+          {// This has been pulled off of this.state via destructuring
           editing ? (
             <Edit
               text={text}
@@ -91,6 +109,8 @@ export default class Post extends Component {
             <span className="Post__text">{text}</span>
           )}
         </div>
+
+        {/* These are all of the little icons in the bottom left corner */}
         <div className="Post__user-controls">
           <MdChatBubbleOutline className="Post__control-icon" />
           <MdFavoriteBorder className="Post__control-icon" />
